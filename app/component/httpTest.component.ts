@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {Component, Input} from '@angular/core'
 import {HttpService} from "../service/http-test.service"
 import {BalanceModel} from "../models/balance.model"
 
@@ -6,7 +6,9 @@ import {BalanceModel} from "../models/balance.model"
     selector: 'httpTest',
     template: `
     <h2>http test</h2>
-	<button (click)="onTestGet()">Test http</button>
+    <button (click)="getAllBalances()">Get all balances</button>
+	<button (click)="getBalanceById()">Get balance by id</button>
+		<input  [(ngModel)]="balanceId" placeholder="balanceId"/>
 	<ul>
 		<li *ngFor="let balance of balances">{{balance.card_serial}} : {{balance.balance}}</li>
 	</ul>
@@ -17,10 +19,21 @@ import {BalanceModel} from "../models/balance.model"
 export class HttpTestComponent{ 
 	httpResult :String;
 	balances : BalanceModel[];
-	
+	balanceId : String;
+
 	constructor(private _httpService : HttpService){}
-	onTestGet(){
-		this._httpService.getCurrentTime()
+	getAllBalances(){
+		this._httpService.getAllBalances()
+			.subscribe(
+				data => this.balances = data,
+				error => alert(error),
+				() => console.log("finish")
+			);
+	}
+
+	getBalanceById() {
+		
+		this._httpService.getBalanceById(this.balanceId)
 			.subscribe(
 				data => this.balances = data,
 				error => alert(error),

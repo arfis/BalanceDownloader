@@ -14,15 +14,20 @@ var HttpTestComponent = (function () {
     function HttpTestComponent(_httpService) {
         this._httpService = _httpService;
     }
-    HttpTestComponent.prototype.onTestGet = function () {
+    HttpTestComponent.prototype.getAllBalances = function () {
         var _this = this;
-        this._httpService.getCurrentTime()
+        this._httpService.getAllBalances()
+            .subscribe(function (data) { return _this.balances = data; }, function (error) { return alert(error); }, function () { return console.log("finish"); });
+    };
+    HttpTestComponent.prototype.getBalanceById = function () {
+        var _this = this;
+        this._httpService.getBalanceById(this.balanceId)
             .subscribe(function (data) { return _this.balances = data; }, function (error) { return alert(error); }, function () { return console.log("finish"); });
     };
     HttpTestComponent = __decorate([
         core_1.Component({
             selector: 'httpTest',
-            template: "\n    <h2>http test</h2>\n\t<button (click)=\"onTestGet()\">Test http</button>\n\t<ul>\n\t\t<li *ngFor=\"let balance of balances\">{{balance.card_serial}} : {{balance.balance}}</li>\n\t</ul>\n    ",
+            template: "\n    <h2>http test</h2>\n    <button (click)=\"getAllBalances()\">Get all balances</button>\n\t<button (click)=\"getBalanceById()\">Get balance by id</button>\n\t\t<input  [(ngModel)]=\"balanceId\" placeholder=\"balanceId\"/>\n\t<ul>\n\t\t<li *ngFor=\"let balance of balances\">{{balance.card_serial}} : {{balance.balance}}</li>\n\t</ul>\n    ",
             providers: [http_test_service_1.HttpService]
         }), 
         __metadata('design:paramtypes', [http_test_service_1.HttpService])
